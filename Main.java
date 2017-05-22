@@ -3,11 +3,17 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class Main {
     public static String TTSLocation="/usr/share/WyabdcRealPeopleTTS" ;                     //发音库的位置
+    public static String WordsFileLocation="/home/leixd/Rememberwords/";                    //默认单词文件存储位置
     public static void main(String[] args) {
 	// write your code here
+
+        File file=new File(WordsFileLocation);
+        if (!file.exists()) file.mkdir();
+
         JFrame jFrameMain=new JFrame("Remember Words");
         JPanel jPanel=new JPanel();
         JButton jButton1=new JButton("添加生词并背诵");
