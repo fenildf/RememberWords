@@ -38,7 +38,7 @@ public class Main {
         jButton3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null,"作者：Thunder Se\n制作时间：2017年5月22日\n版本：0.2\n此程序完全开源且免费，符合GNU规范。\n发音库需要去http://reciteword.sourceforge.net/ 网站下载，并按照网站要求放到/usr/share中相应目录");
+                JOptionPane.showMessageDialog(null,"作者：Thunder Se\n制作时间：2017年5月22日\n版本：0.4\n此程序完全开源且免费，符合GNU规范。\n发音库需要去http://reciteword.sourceforge.net/ 网站下载，并按照网站要求放到/usr/share中相应目录");
             }
         });
     }

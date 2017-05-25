@@ -1,10 +1,17 @@
 
 
 
+import com.sun.media.jfxmedia.AudioClip;
+import com.sun.media.jfxmedia.MediaPlayer;
+import javafx.scene.media.Media;
 import oracle.jrockit.jfr.JFR;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 import sun.swing.SwingUtilities2;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -21,8 +28,12 @@ import java.util.Vector;
  * Created by leixd on 17-5-22.
  */
 public class Words {
+    static long lastProc;               //上一次的发音时间，临时解决重复发音问题
     public static void showImportWordsDialog()
     {
+
+
+
         ArrayList<String[]> wordList=new ArrayList<String[]>();
         DefaultTableModel defaultTableModel=new DefaultTableModel(0,2);
         JFrame jFrame=new JFrame("添加生词并背诵");
@@ -136,9 +147,8 @@ public class Words {
 
                char firstChar=jTextArea.getText().charAt(0);
                try {
-                   Runtime.getRuntime().exec("aplay "+Main.TTSLocation+File.separator+firstChar+File.separator+jTextArea.getText().substring(0,jTextArea.getText().length()-1)+".wav");
-
-               } catch (IOException e1) {
+                   Runtime.getRuntime().exec("cvlc --play-and-exit "+Main.TTSLocation+File.separator+firstChar+File.separator+jTextArea.getText().replace(" ","").replace("\n","")+".wav");
+                       } catch (IOException e1) {
                    e1.printStackTrace();
                }
                jTextArea2.setText("");
@@ -149,6 +159,23 @@ public class Words {
 
 
         jTable.setModel(defaultTableModel);
+        jTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+
+                if (System.currentTimeMillis()-lastProc<200) return;
+                lastProc=System.currentTimeMillis();
+
+                int row = jTable.getSelectedRow();
+                String word=wordList.get(row)[0];
+                try {
+                    char firstChar=word.charAt(0);
+                    Runtime.getRuntime().exec("cvlc --play-and-exit "+Main.TTSLocation+File.separator+firstChar+File.separator+word.replace(" ","").replace("\n","")+".wav");
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
         jFrame.add(new JScrollPane(jTable));
 
 
